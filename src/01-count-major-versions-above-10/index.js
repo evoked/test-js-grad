@@ -30,20 +30,21 @@
   */
  
 const axios = require('axios');
- module.exports = async function countMajorVersionsAbove10() {
-  const data = await axios.post('http://ambush-api.inyourarea.co.uk/ambush/intercept', {
+module.exports = async function countMajorVersionsAbove10() {
+  const { data } = await axios.post('http://ambush-api.inyourarea.co.uk/ambush/intercept', {
     "url": "https://api.npms.io/v2/search/suggestions?q=react",
     "method": "GET",
     "return_payload": true
   })
-  // const content = {...data}
-  // console.log(content)
-  var count = 0
-  data.data.content.forEach(element => {
+
+  // Initialise counter
+  let count = 0
+  // For each package information grabbed via API we concatenate the version string & iterate counter accordingly
+  data.content.forEach(element => {
     if(element.package.version.split('.')[0] >= 10) {
       count++;
-      console.log(element.package.version)
     }
   });
+  
   return count
 };
