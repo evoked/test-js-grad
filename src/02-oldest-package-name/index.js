@@ -31,21 +31,24 @@ The results should have this structure:
 const axios = require('axios');
 module.exports = async function oldestPackageName() {
   // TODO
-  const data = await axios.post('http://ambush-api.inyourarea.co.uk/ambush/intercept', {
+  const { data } = await axios.post('http://ambush-api.inyourarea.co.uk/ambush/intercept', {
     "url": "https://api.npms.io/v2/search/suggestions?q=react",
     "method": "GET",
     "return_payload": true
   })
 
+  // Initialise array
   var nameDate = []
 
-  data.data.content.forEach(element => {
+  // Add each key-value (name-date) to array
+  data.content.forEach(element => {
     nameDate.push({name: element.package.name, date: element.package.date})
   });
 
+  // Use reduce to return the object with the lowest date
   const name = nameDate.reduce((a,b) => {
     return a.date < b.date ? a : b
   })
-  
+
   return name.name
 };
